@@ -61,6 +61,34 @@ git-commit() {
   git commit -am "[Automatic] Makefile update."
 }
 
+build-index() {
+
+  if [[ -n $@ ]]; then
+    files=($@)
+  else
+    files=(${allpics[@]})
+  fi
+
+  cp -f index.html.tmpl index.html
+  for file in ${files[@]}; do
+    sed -i "/<!-- BUILDER IMAGE REPLACEMENT -->/ i $(gallery-file-html "$file")" index.html
+  done
+}
+
+gallery-file-html() {
+  echo -n " \
+      <a \
+        href=\\"https://media.githubusercontent.com/media/ag4ve/misc-pics/master/${1}\\" \
+        title=\\"${2:-Untitled}\\" \
+      > \
+        <img \
+          src=\\"https://media.githubusercontent.com/media/ag4ve/misc-pics/master/${1/img/thumbs}\\" \
+          alt=\\"${2:-Untitled}\\" \
+        /> \
+      </a> \
+  "
+}
+
 help() {
   echo -ne \
     "This is a dead simple bash builder script that lets you do\n" \
