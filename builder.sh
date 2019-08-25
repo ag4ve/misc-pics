@@ -63,10 +63,10 @@ git-commit() {
 
 build-index() {
 
-  if [[ -n $@ ]]; then
-    files=($@)
+  if [[ -z $@ ]]; then
+    files=(${pics[@]})
   else
-    files=(${allpics[@]})
+    files=($@)
   fi
 
   cp -f index.html.tmpl index.html
